@@ -3,7 +3,9 @@ package assign07;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 import assign07.Graph.Vertex;
@@ -90,27 +92,57 @@ public class Graph<Type> {
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
 
+		
 		if (source.equals(destination)) {
 			return true;
 		}
+		if (sourceVertex.edges.size() == 0) {
+			return false;
+		}
 
-		ArrayList<Vertex> verticesToVisit = new ArrayList<Vertex>();
 
 		for (Vertex edge : sourceVertex.edges) {
 			if (!edge.visited) {
 				edge.visited();
-				verticesToVisit.add(edge);
+				depthFirstSearch(edge.data, destination);
 			}
 		}
-
-		depthFirstSearch(source, destination);
-
-		return false;
+	}
+	
+	private boolean depthFirstSearch(Vertex source, Vertex destination) {
+		//TODO
 	}
 
-	public List<Vertex> breadthFirstSearch(Vertex source, Vertex destination) {
-
+	public List<Vertex> breadthFirstSearch(Type source, Type destination) {
+		Vertex sourceVertex = vertices.get(source);
+		Vertex destVertex = vertices.get(destination);
+		
+		ArrayList<Vertex> path = new ArrayList<Vertex>();
+		LinkedList<Vertex> queue = new LinkedList<Vertex>();
+		queue.offer(sourceVertex);
+		
+		while (!queue.isEmpty()) {
+			if (queue.peek().equals(destVertex)) {
+				path.add(queue.peek());
+				path.add(queue.poll().cameFrom);
+			}
+			else {
+				for (Vertex edge : queue.poll().edges) {
+					edge.visited();
+					if (!edge.visited) {
+						edge.cameFrom = edge;
+						queue.offer(edge);
+					}
+				}
+			}
+		}
+		while (path.getLast().cameFrom != null) {
+			path.add(path.getLast().cameFrom);
+		}
+		return path;
 	}
+	
+
 
 	public List<Vertex> topoSort() {
 
@@ -121,8 +153,10 @@ public class Graph<Type> {
 		private Type data;
 		private String name;
 		private ArrayList<Vertex> edges;
+		private Vertex cameFrom;
 
 		public Vertex(Type data, String name) {
+			this.cameFrom = null;
 			this.visited = false;
 			this.data = data;
 			this.name = name;
@@ -130,6 +164,7 @@ public class Graph<Type> {
 		}
 
 		public Vertex(String name) {
+			this.cameFrom = null;
 			this.visited = false;
 			this.data = null;
 			this.name = name;
