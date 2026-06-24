@@ -13,7 +13,7 @@ class GraphTest {
 
 	@Test
 	void bfsFindsSimplePath() {
-		GraphFix<String> graph = new GraphFix<String>();
+		Graph<String> graph = new Graph<String>();
 		graph.addEdge("A", "B");
 
 		assertEquals(2, graph.breadthFirstSearch("A", "B").size());
