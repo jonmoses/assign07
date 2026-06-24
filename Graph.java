@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import assign07.Graph.Vertex;
 
 /**
  * Represents a sparse, unweighted, directed graph (a set of vertices and a set
@@ -135,7 +134,7 @@ public class Graph<Type> {
 				}
 			}
 		}
-		while (path.getLast().cameFrom != null) {
+		while (path.getLast().cameFrom != sourceVertex) {
 			path.add(path.getLast().cameFrom);
 		}
 		return path;
