@@ -1,35 +1,48 @@
-package lec15;
+package assign07;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import assign07.Graph.Vertex;
 
 /**
- * Represents a sparse, unweighted, directed graph (a set of vertices and a set of edges). 
- * The graph is not generic and assumes that a string name is stored at each vertex.
+ * Represents a sparse, unweighted, directed graph (a set of vertices and a set
+ * of edges). The graph is not generic and assumes that a string name is stored
+ * at each vertex.
  * 
  * @author Eric Heisler
  * @version 2025-6-17
  */
-public class GraphSolution <Type> {
+public class Graph<Type> {
 
 	// the graph -- a set of vertices (String name mapped to Vertex instance)
 	private HashMap<String, Vertex> vertices;
 
+	private int numOfVertices;
+
 	/**
 	 * Constructs an empty graph.
 	 */
-	public GraphSolution() {
+	public Graph() {
 		vertices = new HashMap<String, Vertex>();
+
 	}
 
 	/**
-	 * Adds to the graph a directed edge from the vertex with name "name1" 
-	 * to the vertex with name "name2".  (If either vertex does not already 
-	 * exist in the graph, it is added.)
+	 * 
+	 * @return - the number of vertices
+	 */
+	public int size() {
+		return vertices.size();
+	}
+
+	/**
+	 * Adds to the graph a directed edge from the vertex with name "name1" to the
+	 * vertex with name "name2". (If either vertex does not already exist in the
+	 * graph, it is added.)
 	 * 
 	 * @param name1 - string name for source vertex
 	 * @param name2 - string name for destination vertex
@@ -50,8 +63,7 @@ public class GraphSolution <Type> {
 		// do the same for vertex2
 		if (vertices.containsKey(name2)) {
 			vertex2 = vertices.get(name2);
-		}
-		else {
+		} else {
 			vertex2 = new Vertex(name2);
 			vertices.put(name2, vertex2);
 		}
@@ -59,78 +71,88 @@ public class GraphSolution <Type> {
 		// add new directed edge from vertex1 to vertex2
 		vertex1.addEdge(vertex2);
 	}
-	
-	/**
-	 * Generates the DOT encoding of this graph as string, which can be 
-	 * pasted into http://www.webgraphviz.com to produce a visualization.
-	 */
-	public String generateDot() {
-		StringBuilder dot = new StringBuilder("digraph d {\n");
-		
-		// for every vertex 
-		for (String str : vertices.keySet()) {
-			// for every edge
-			Iterator<Vertex> edges = vertices.get(str).edges();
-			while (edges.hasNext()) {
-				dot.append("\t\"" + vertices.get(str).getName() + "\" -> \"" + edges.next().getName() + "\"\n");
-			}
-		}
-		
-		return dot.toString() + "}";
-	}
-	
+
 	/**
 	 * Generates a simple textual representation of this graph.
 	 */
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		
+
 		for (String str : vertices.keySet()) {
-			result.append(vertices.get(str) + "\n");	
+			result.append(vertices.get(str) + "\n");
 		}
-		
+
 		return result.toString();
 	}
-	
-	
+
 	public boolean depthFirstSearch(Vertex source, Vertex destination) {
-		
-	}
-	
-	public List<Vertex> breadthFirstSearch(Vertex source, Vertex destination) {
-		
+		if (source.data.equals(destination)) {
+			return true;
+		}
+
+		for (Vertex edge : source.to) {
+			if (!edge.visited) {
+				depthFirstSearch(edge, destination);
+			}
+		}
+
 	}
 
-	
-	public List<Vertex> topoSort() {
-		
+	public List<Vertex> breadthFirstSearch(Vertex source, Vertex destination) {
+
+		boolean[] seen = new boolean[g.nVertices()];
+		Queue<Integer> q = new SLList<Integer>();
+		q.add(r);
+		seen[r] = true;
+		while (!q.isEmpty()) {
+			int i = q.remove();
+			for (Integer j : g.outEdges(i)) {
+				if (!seen[j]) {
+					q.add(j);
+					seen[j] = true;
+				}
+			}
+		}
 	}
-	
-	
+
+	}
+
+	public List<Vertex> topoSort() {
+
+	}
+
 	private class Vertex {
-		private String name;
+		private boolean visited;
 		private Type data;
+		private String name;
 		private ArrayList<Vertex> to;
-		
-		
-		
-		public Vertex(String name, Type data) {
+
+		public Vertex(Type data, String name) {
+			this.visited = false;
 			this.data = data;
 			this.name = name;
 			this.to = new ArrayList<Vertex>();
 		}
-		
+
+		public Vertex(String name) {
+			this.visited = false;
+			this.data = null;
+			this.name = name;
+			this.to = new ArrayList<Vertex>();
+		}
+
+		public void visted() {
+			this.visited = true;
+		}
+
 		public void addEdge(Vertex toVertex) {
 			to.add(toVertex);
 		}
-		
+
 		public Type getData() {
 			return data;
 		}
-		public String getName() {
-			return name;
-		}
-		
+
 		public void removeEdge(Vertex vertexToRemove) {
 			if (to.contains(vertexToRemove)) {
 				to.remove(vertexToRemove);
@@ -138,6 +160,4 @@ public class GraphSolution <Type> {
 		}
 	}
 
-
-	
 }
