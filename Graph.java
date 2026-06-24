@@ -91,26 +91,35 @@ public class Graph<Type> {
 
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
+		
+		
+		for (Vertex vertex : vertices.values()) {
+			vertex.visited = false;
+		}
+		
+		if (sourceVertex == null || destVertex == null) {
+			return false;
+		}
+		
+		return depthFirstSearchHelper(sourceVertex, destVertex);
+
+			
 
 		
+	}
+	
+	private boolean depthFirstSearchHelper(Vertex source, Vertex destination) {
 		if (source.equals(destination)) {
 			return true;
 		}
-		if (sourceVertex.edges.size() == 0) {
-			return false;
-		}
-
-
-		for (Vertex edge : sourceVertex.edges) {
-			if (!edge.visited) {
-				edge.visited();
-				depthFirstSearch(edge.data, destination);
+		for (Vertex vertex : source.edges) {
+			if (!vertex.visited) {
+				if (depthFirstSearchHelper(vertex, destination)) {
+					return true;
+				}
 			}
 		}
-	}
-	
-	private boolean depthFirstSearch(Vertex source, Vertex destination) {
-		//TODO
+		return false;
 	}
 
 	public List<Vertex> breadthFirstSearch(Type source, Type destination) {
