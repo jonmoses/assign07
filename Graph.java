@@ -85,35 +85,30 @@ public class Graph<Type> {
 		return result.toString();
 	}
 
-	public boolean depthFirstSearch(Vertex source, Vertex destination) {
-		if (source.data.equals(destination)) {
+	public boolean depthFirstSearch(Type source, Type destination) {
+
+		Vertex sourceVertex = vertices.get(source);
+		Vertex destVertex = vertices.get(destination);
+
+		if (source.equals(destination)) {
 			return true;
 		}
 
-		for (Vertex edge : source.to) {
+		ArrayList<Vertex> verticesToVisit = new ArrayList<Vertex>();
+
+		for (Vertex edge : sourceVertex.edges) {
 			if (!edge.visited) {
-				depthFirstSearch(edge, destination);
+				edge.visited();
+				verticesToVisit.add(edge);
 			}
 		}
 
+		depthFirstSearch(source, destination);
+
+		return false;
 	}
 
 	public List<Vertex> breadthFirstSearch(Vertex source, Vertex destination) {
-
-		boolean[] seen = new boolean[g.nVertices()];
-		Queue<Integer> q = new SLList<Integer>();
-		q.add(r);
-		seen[r] = true;
-		while (!q.isEmpty()) {
-			int i = q.remove();
-			for (Integer j : g.outEdges(i)) {
-				if (!seen[j]) {
-					q.add(j);
-					seen[j] = true;
-				}
-			}
-		}
-	}
 
 	}
 
@@ -125,28 +120,28 @@ public class Graph<Type> {
 		private boolean visited;
 		private Type data;
 		private String name;
-		private ArrayList<Vertex> to;
+		private ArrayList<Vertex> edges;
 
 		public Vertex(Type data, String name) {
 			this.visited = false;
 			this.data = data;
 			this.name = name;
-			this.to = new ArrayList<Vertex>();
+			this.edges = new ArrayList<Vertex>();
 		}
 
 		public Vertex(String name) {
 			this.visited = false;
 			this.data = null;
 			this.name = name;
-			this.to = new ArrayList<Vertex>();
+			this.edges = new ArrayList<Vertex>();
 		}
 
-		public void visted() {
+		public void visited() {
 			this.visited = true;
 		}
 
 		public void addEdge(Vertex toVertex) {
-			to.add(toVertex);
+			edges.add(toVertex);
 		}
 
 		public Type getData() {
@@ -154,8 +149,8 @@ public class Graph<Type> {
 		}
 
 		public void removeEdge(Vertex vertexToRemove) {
-			if (to.contains(vertexToRemove)) {
-				to.remove(vertexToRemove);
+			if (edges.contains(vertexToRemove)) {
+				edges.remove(vertexToRemove);
 			}
 		}
 	}
