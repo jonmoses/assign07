@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.Stack;
 
 
+
 /**
  * Represents a sparse, unweighted, directed graph (a set of vertices and a set
  * of edges). The graph is not generic and assumes that a string name is stored
@@ -116,7 +117,6 @@ public class Graph<Type> {
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
 		
-		ArrayList<Vertex> path = new ArrayList<Vertex>();
 		LinkedList<Vertex> queue = new LinkedList<Vertex>();
 		queue.offer(sourceVertex);
 		
@@ -134,8 +134,11 @@ public class Graph<Type> {
 				}
 			}
 		}
-		while (path.getLast().cameFrom != sourceVertex) {
-			path.add(path.getLast().cameFrom);
+		LinkedList<Vertex> path = new LinkedList<Vertex>();
+		if (destVertex.visited) {
+			for (Vertex vertex = destVertex; vertex != null; vertex = vertex.cameFrom) {
+				path.addFirst(vertex);
+			}
 		}
 		return path;
 	}
