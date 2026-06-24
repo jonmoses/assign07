@@ -122,17 +122,16 @@ public class Graph<Type> {
 		queue.offer(sourceVertex);
 		
 		while (!queue.isEmpty()) {
-			if (queue.peek().equals(destVertex)) {
-				path.add(queue.peek());
-				path.add(queue.poll().cameFrom);
+			Vertex current = queue.poll();
+
+			if (current.equals(destVertex)) {
+				break;
 			}
-			else {
-				for (Vertex edge : queue.poll().edges) {
+			for (Vertex edge : current.edges) {
+				if (!edge.visited) {
 					edge.visited();
-					if (!edge.visited) {
-						edge.cameFrom = edge;
-						queue.offer(edge);
-					}
+					edge.cameFrom = current; 
+					queue.offer(edge);
 				}
 			}
 		}
