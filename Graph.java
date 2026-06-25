@@ -47,6 +47,10 @@ public class Graph<Type> {
 	 * @param name1 - string name for source vertex
 	 * @param name2 - string name for destination vertex
 	 */
+	public void addVertex(String name, Type data) {
+		vertices.put(name, new Vertex(data, name));
+	}
+	
 	public void addEdge(String name1, String name2) {
 		Vertex vertex1;
 		// if vertex already exists in graph, get its object
@@ -146,24 +150,14 @@ public class Graph<Type> {
 		return path;
 	}
 
-	public List<Vertex> topoSort() {
-		/*
-		 * Overview of Topological Sort • Have a queue of vertices • Have a return list
-		 * where we will insert things in order • Initially, vertices with an in-degree
-		 * of 0 are in the queue • When we process each item in the queue: • Add it to
-		 * the return list • Remove edges between it and its neigbhors • If any
-		 * neighbors now have an in-degree of 0, add them to the queue • Repeat until
-		 * the queue is empty • Return the return list
-		 */
-		LinkedList<Vertex> q = new LinkedList<Vertex>();
-
+	public List<Type> topoSort() {
 		HashMap<Vertex, Integer> inDegree = new HashMap<Vertex, Integer>();
 		for (Vertex vertex : vertices.values()) {
 			inDegree.put(vertex, 0);
 		}
 		for (Vertex vertex : vertices.values()) {
-			for (Vertex in : vertex.edges) {
-				inDegree.put(vertex, inDegree.get(vertex) + 1);
+			for (Vertex edge : vertex.edges) {
+				inDegree.put(edge, inDegree.get(vertex) + 1);
 			}
 		}
 
@@ -174,16 +168,16 @@ public class Graph<Type> {
 			}
 		}
 
-		ArrayList<Vertex> returnList = new ArrayList<Vertex>();
+		ArrayList<Type> returnList = new ArrayList<Type>();
 
 		while (!queue.isEmpty()) {
 			Vertex current = queue.poll();
-			returnList.add(current);
+			returnList.add(current.data);
 			for (Vertex vertex : current.edges) {
 				inDegree.put(vertex, inDegree.get(vertex) - 1);
 
 				if (inDegree.get(vertex) == 0) {
-					queue.add(current);
+					queue.add(vertex);
 				}
 
 			}
