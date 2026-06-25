@@ -1,16 +1,45 @@
 package assign07;
 
+import java.util.List;
+
 public class GraphUtility {
+
 	public static <Type> boolean areConnected(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
-
+		Graph<Type> graph = new Graph<Type>();
+		for (int i = 0; i < sources.size(); i++) {
+			Type src = sources.get(i);
+			Type dest = destinations.get(i);
+			graph.addVertex(src.toString(), src);
+			graph.addVertex(dest.toString(), dest);
+			graph.addEdge(src.toString(), dest.toString());
+		}
+		return graph.depthFirstSearch(srcData, dstData);
 	}
-
-	public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData,
-			Type dstData) {
-
+	
+	public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
+		
+		Graph<Type> graph = new Graph<Type>();
+		for (int i = 0; i < sources.size(); i++) {
+			Type src = sources.get(i);
+			Type dest = destinations.get(i);
+			graph.addVertex(src.toString(), src);
+			graph.addVertex(dest.toString(), dest);
+			graph.addEdge(src.toString(), dest.toString());
+		}
+		
+		return graph.breadthFirstSearch(srcData, dstData);
 	}
 
 	public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) {
-
+		Graph<Type> graph = new Graph<Type>();
+		for (int i = 0; i < sources.size(); i++) {
+			Type src = sources.get(i);
+			Type dest = destinations.get(i);
+			graph.addVertex(src.toString(), src);
+			graph.addVertex(dest.toString(), dest);
+			graph.addEdge(src.toString(), dest.toString());
+		}
+		
+		return graph.topoSort();
 	}
 }

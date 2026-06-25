@@ -120,7 +120,7 @@ public class Graph<Type> {
 		return false;
 	}
 
-	public List<Vertex> breadthFirstSearch(Type source, Type destination) {
+	public List<Type> breadthFirstSearch(Type source, Type destination) {
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
 
@@ -141,10 +141,10 @@ public class Graph<Type> {
 				}
 			}
 		}
-		LinkedList<Vertex> path = new LinkedList<Vertex>();
+		LinkedList<Type> path = new LinkedList<Type>();
 		if (destVertex.visited) {
 			for (Vertex vertex = destVertex; vertex != null; vertex = vertex.cameFrom) {
-				path.addFirst(vertex);
+				path.addFirst(vertex.data);
 			}
 		}
 		return path;
@@ -210,6 +210,7 @@ public class Graph<Type> {
 			this.name = name;
 			this.edges = new ArrayList<Vertex>();
 		}
+		
 
 		public void visited() {
 			this.visited = true;
