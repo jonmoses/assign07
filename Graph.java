@@ -2,19 +2,17 @@ package assign07;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Stack;
 
 /**
  * Represents a sparse, unweighted, directed graph (a set of vertices and a set
  * of edges). The graph is not generic and assumes that a string name is stored
- * at each vertex.
+ * at each vertex. for summer 2026 CS2420 assignment 07
  * 
- * @author Eric Heisler
- * @version 2025-6-17
+ * @author Jon Moses and Jaron Burton
+ * @version 2026-6-17
  */
 public class Graph<Type> {
 
@@ -48,13 +46,31 @@ public class Graph<Type> {
 	 * @param name2 - string name for destination vertex
 	 */
 	public void addVertex(String name, Type data) {
-		vertices.put(name, new Vertex(data, name));
+		if (!vertices.containsKey(name)) {
+			vertices.put(name, new Vertex(data, name));
+		}
 	}
 
+	/**
+	 * checks if a vertex with the given name exists in the graph.
+	 * 
+	 * @param name - string that is the vertex name
+	 * @return - true if a vertex with the name exists in the graph, false
+	 *         otherwise.
+	 */
 	public boolean containsVertex(String name) {
 		return vertices.containsKey(name);
 	}
 
+	/**
+	 * Adds an edge and creates the vertices if they don't exist in the graph
+	 * already
+	 * 
+	 * @param name1 - String that is the name of the vertex, used as the key in the
+	 *              vertices hashmap and to construct a new Vertex.
+	 * @param name2 - String that is the name of the vertex, used as the key in the
+	 *              vertices hashmap and to construct a new Vertex.
+	 */
 	public void addEdge(String name1, String name2) {
 		Vertex vertex1;
 		// if vertex already exists in graph, get its object
@@ -93,10 +109,19 @@ public class Graph<Type> {
 		return result.toString();
 	}
 
+	/**
+	 * Calls on the dfshelper method to perform DFS after checking the validity of
+	 * the source and destination vertex. uses the helper to recursively search the
+	 * graph.
+	 * 
+	 * @param source      - any value stored in a vertex in the graph
+	 * @param destination - any value stored in a vertex in the graph
+	 * @return - true if a path exists, false otherwise
+	 */
 	public boolean depthFirstSearch(Type source, Type destination) {
 
-		Vertex sourceVertex = vertices.get(source);
-		Vertex destVertex = vertices.get(destination);
+		Vertex sourceVertex = vertices.get(source.toString());
+		Vertex destVertex = vertices.get(destination.toString());
 
 		for (Vertex vertex : vertices.values()) {
 			vertex.visited = false;
@@ -110,6 +135,15 @@ public class Graph<Type> {
 
 	}
 
+	/**
+	 * Performs depth first search recursively to find a path from the source vertex
+	 * to the destination vertex. converts the <Type> from the main depthFirstSearch
+	 * method to <Vertex> to make it easier to work with.
+	 * 
+	 * @param source      - Any vertex in the graph
+	 * @param destination - any vertex in the graph
+	 * @return true if the path exists, false otherwise
+	 */
 	private boolean depthFirstSearchHelper(Vertex source, Vertex destination) {
 		source.visited = true;
 
@@ -126,11 +160,28 @@ public class Graph<Type> {
 		return false;
 	}
 
+	/**
+	 * Performs breadthfirstSearch non-recursively
+	 * 
+	 * @param source      - Any value that is held by a vertex in this graph
+	 * @param destination - Any value that is held by a vertex in the graph
+	 * @return - A list that is the shortest path from source to destination.
+	 */
 	public List<Type> breadthFirstSearch(Type source, Type destination) {
-		Vertex sourceVertex = vertices.get(source);
-		Vertex destVertex = vertices.get(destination);
+		Vertex sourceVertex = vertices.get(source.toString());
+		Vertex destVertex = vertices.get(destination.toString());
+
+		if (sourceVertex == null || destVertex == null) {
+			return new LinkedList<Type>();
+		}
+
+		for (Vertex vertex : vertices.values()) {
+			vertex.visited = false;
+			vertex.cameFrom = null;
+		}
 
 		LinkedList<Vertex> queue = new LinkedList<Vertex>();
+		sourceVertex.visited();
 		queue.offer(sourceVertex);
 
 		while (!queue.isEmpty()) {
@@ -157,6 +208,13 @@ public class Graph<Type> {
 		return path;
 	}
 
+	/**
+	 * Topologically sort the graph and return a list in the order.
+	 * 
+	 * @return - a list that is the topoligically sorted list of all the vertices in
+	 *         the graph if such a sorting exists. will return an array that is
+	 *         smaller than the size of the graph if a cycle exists.
+	 */
 	public List<Type> topoSort() {
 		HashMap<Vertex, Integer> inDegree = new HashMap<Vertex, Integer>();
 		for (Vertex vertex : vertices.values()) {
@@ -191,7 +249,7 @@ public class Graph<Type> {
 
 		}
 
-		if (queue.size() != vertices.size()) {
+		if (returnList.size() != vertices.size()) {
 			throw new IllegalArgumentException("Graph contains a cycle.");
 		}
 
@@ -199,6 +257,9 @@ public class Graph<Type> {
 
 	}
 
+	/**
+	 * Private class that is used by the graph
+	 */
 	private class Vertex {
 		private boolean visited;
 		private Type data;
@@ -206,6 +267,10 @@ public class Graph<Type> {
 		private ArrayList<Vertex> edges;
 		private Vertex cameFrom;
 
+		/*
+		 * Allows you to name the vertex with a string and set the stored data to a
+		 * desired value.
+		 */
 		public Vertex(Type data, String name) {
 			this.cameFrom = null;
 			this.visited = false;
@@ -214,6 +279,11 @@ public class Graph<Type> {
 			this.edges = new ArrayList<Vertex>();
 		}
 
+		/**
+		 * This constructor lets you just set the name, and the data is null.
+		 * 
+		 * @param name
+		 */
 		public Vertex(String name) {
 			this.cameFrom = null;
 			this.visited = false;
@@ -222,18 +292,38 @@ public class Graph<Type> {
 			this.edges = new ArrayList<Vertex>();
 		}
 
+		/**
+		 * used by searching algorithms to flag vertices that have already been visited
+		 * and stop infinite loops from occuring if the graph is cyclic.
+		 */
 		public void visited() {
 			this.visited = true;
 		}
 
+		/**
+		 * adds a vertex to the list of edges to indicate that the vertex is connected
+		 * thisVertex -> toVertex
+		 * 
+		 * @param toVertex
+		 */
 		public void addEdge(Vertex toVertex) {
 			edges.add(toVertex);
 		}
 
+		/**
+		 * simple getter for data
+		 * 
+		 * @return - <Type>
+		 */
 		public Type getData() {
 			return data;
 		}
 
+		/**
+		 * removes an edge if the graph needs to be adjusted.
+		 * 
+		 * @param vertexToRemove
+		 */
 		public void removeEdge(Vertex vertexToRemove) {
 			if (edges.contains(vertexToRemove)) {
 				edges.remove(vertexToRemove);

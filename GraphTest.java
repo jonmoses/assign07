@@ -35,22 +35,22 @@ class GraphTest {
 
 		assertEquals(2, graph.breadthFirstSearch("A", "B").size());
 	}
-	
+
 	@Test
 	void dfsFindsSimplePath() {
 		assertTrue(graph.depthFirstSearch("A", "B"));
 	}
-	
+
 	@Test
 	void dfsFindsBiggerPath() {
 		assertTrue(graph.depthFirstSearch("A", "C"));
 	}
-	
+
 	@Test
 	void bfsFindsBiggerPath() {
 		assertEquals(3, graph.breadthFirstSearch("A", "C").size());
 	}
-	
+
 	@Test
 	void topoSort() {
 		assertEquals(correctTopo, graph.topoSort());
