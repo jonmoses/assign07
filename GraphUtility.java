@@ -21,6 +21,10 @@ public class GraphUtility {
 			graph.addVertex(dest.toString(), dest);
 			graph.addEdge(src.toString(), dest.toString());
 		}
+
+		if (!graph.containsVertex(srcData.toString()) || !graph.containsVertex(dstData.toString()))
+			throw new IllegalArgumentException();
+
 		return graph.depthFirstSearch(srcData, dstData);
 	}
 
@@ -41,6 +45,11 @@ public class GraphUtility {
 			graph.addVertex(dest.toString(), dest);
 			graph.addEdge(src.toString(), dest.toString());
 		}
+
+		List<Type> path = graph.breadthFirstSearch(srcData, dstData);
+
+		if (path.isEmpty())
+			throw new IllegalArgumentException();
 
 		return graph.breadthFirstSearch(srcData, dstData);
 	}

@@ -50,7 +50,11 @@ public class Graph<Type> {
 	public void addVertex(String name, Type data) {
 		vertices.put(name, new Vertex(data, name));
 	}
-	
+
+	public boolean containsVertex(String name) {
+		return vertices.containsKey(name);
+	}
+
 	public void addEdge(String name1, String name2) {
 		Vertex vertex1;
 		// if vertex already exists in graph, get its object
@@ -107,16 +111,18 @@ public class Graph<Type> {
 	}
 
 	private boolean depthFirstSearchHelper(Vertex source, Vertex destination) {
-		if (source.equals(destination)) {
+		source.visited = true;
+
+		if (source == destination)
 			return true;
-		}
+
 		for (Vertex vertex : source.edges) {
 			if (!vertex.visited) {
-				if (depthFirstSearchHelper(vertex, destination)) {
+				if (depthFirstSearchHelper(vertex, destination))
 					return true;
-				}
 			}
 		}
+
 		return false;
 	}
 
@@ -147,6 +153,7 @@ public class Graph<Type> {
 				path.addFirst(vertex.data);
 			}
 		}
+
 		return path;
 	}
 
@@ -184,6 +191,10 @@ public class Graph<Type> {
 
 		}
 
+		if (queue.size() != vertices.size()) {
+			throw new IllegalArgumentException("Graph contains a cycle.");
+		}
+
 		return returnList;
 
 	}
@@ -210,7 +221,6 @@ public class Graph<Type> {
 			this.name = name;
 			this.edges = new ArrayList<Vertex>();
 		}
-		
 
 		public void visited() {
 			this.visited = true;
