@@ -6,11 +6,11 @@ public class GraphUtility {
 
 	public static <Type> boolean areConnected(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
 		if (sources == null || destinations == null) {
-			throw new IllegalArgumentException("Source and destination lists cannot be null.");
+			throw new IllegalArgumentException();
 		}
 
 		if (sources.size() != destinations.size()) {
-			throw new IllegalArgumentException("Source and destination lists must be the same size.");
+			throw new IllegalArgumentException();
 		}
 
 		Graph<Type> graph = new Graph<Type>();
@@ -27,11 +27,11 @@ public class GraphUtility {
 	public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData,
 			Type dstData) {
 		if (sources == null || destinations == null) {
-			throw new IllegalArgumentException("Source and destination lists cannot be null.");
+			throw new IllegalArgumentException();
 		}
 
 		if (sources.size() != destinations.size()) {
-			throw new IllegalArgumentException("Source and destination lists must be the same size.");
+			throw new IllegalArgumentException();
 		}
 		Graph<Type> graph = new Graph<Type>();
 		for (int i = 0; i < sources.size(); i++) {
@@ -47,11 +47,11 @@ public class GraphUtility {
 
 	public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) {
 		if (sources == null || destinations == null) {
-			throw new IllegalArgumentException("Source and destination lists cannot be null.");
+			throw new IllegalArgumentException();
 		}
 
 		if (sources.size() != destinations.size()) {
-			throw new IllegalArgumentException("Source and destination lists must be the same size.");
+			throw new IllegalArgumentException();
 		}
 		Graph<Type> graph = new Graph<Type>();
 		for (int i = 0; i < sources.size(); i++) {
