@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-
-
 /**
  * Represents a sparse, unweighted, directed graph (a set of vertices and a set
  * of edges). The graph is not generic and assumes that a string name is stored
@@ -91,23 +89,19 @@ public class Graph<Type> {
 
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
-		
-		
+
 		for (Vertex vertex : vertices.values()) {
 			vertex.visited = false;
 		}
-		
+
 		if (sourceVertex == null || destVertex == null) {
 			return false;
 		}
-		
+
 		return depthFirstSearchHelper(sourceVertex, destVertex);
 
-			
-
-		
 	}
-	
+
 	private boolean depthFirstSearchHelper(Vertex source, Vertex destination) {
 		if (source.equals(destination)) {
 			return true;
@@ -125,10 +119,10 @@ public class Graph<Type> {
 	public List<Vertex> breadthFirstSearch(Type source, Type destination) {
 		Vertex sourceVertex = vertices.get(source);
 		Vertex destVertex = vertices.get(destination);
-		
+
 		LinkedList<Vertex> queue = new LinkedList<Vertex>();
 		queue.offer(sourceVertex);
-		
+
 		while (!queue.isEmpty()) {
 			Vertex current = queue.poll();
 
@@ -138,7 +132,7 @@ public class Graph<Type> {
 			for (Vertex edge : current.edges) {
 				if (!edge.visited) {
 					edge.visited();
-					edge.cameFrom = current; 
+					edge.cameFrom = current;
 					queue.offer(edge);
 				}
 			}
@@ -151,25 +145,18 @@ public class Graph<Type> {
 		}
 		return path;
 	}
-	
-
 
 	public List<Vertex> topoSort() {
 		/*
-		 * Overview of Topological Sort
-• Have a queue of vertices
-• Have a return list where we will insert things in order
-• Initially, vertices with an in-degree of 0 are in the queue
-• When we process each item in the queue:
-• Add it to the return list
-• Remove edges between it and its neigbhors
-• If any neighbors now have an in-degree of 0, add them to the queue
-• Repeat until the queue is empty
-• Return the return list
+		 * Overview of Topological Sort • Have a queue of vertices • Have a return list
+		 * where we will insert things in order • Initially, vertices with an in-degree
+		 * of 0 are in the queue • When we process each item in the queue: • Add it to
+		 * the return list • Remove edges between it and its neigbhors • If any
+		 * neighbors now have an in-degree of 0, add them to the queue • Repeat until
+		 * the queue is empty • Return the return list
 		 */
 		LinkedList<Vertex> q = new LinkedList<Vertex>();
-		ArrayList<Vertex> returnList = new ArrayList<Vertex>();
-		
+
 		HashMap<Vertex, Integer> inDegree = new HashMap<Vertex, Integer>();
 		for (Vertex vertex : vertices.values()) {
 			inDegree.put(vertex, 0);
@@ -179,8 +166,31 @@ public class Graph<Type> {
 				inDegree.put(vertex, inDegree.get(vertex) + 1);
 			}
 		}
-		
-		
+
+		Queue<Vertex> queue = new LinkedList<Vertex>();
+		for (Vertex vertex : vertices.values()) {
+			if (inDegree.get(vertex) == 0) {
+				queue.add(vertex);
+			}
+		}
+
+		ArrayList<Vertex> returnList = new ArrayList<Vertex>();
+
+		while (!queue.isEmpty()) {
+			Vertex current = queue.poll();
+			returnList.add(current);
+			for (Vertex vertex : current.edges) {
+				inDegree.put(vertex, inDegree.get(vertex) - 1);
+
+				if (inDegree.get(vertex) == 0) {
+					queue.add(current);
+				}
+
+			}
+
+		}
+
+		return returnList;
 
 	}
 
