@@ -18,13 +18,16 @@ class GraphTest {
 		correctTopo.add("A");
 		correctTopo.add("B");
 		correctTopo.add("C");
+		correctTopo.add("D");
 
 		graph = new Graph<String>();
 		graph.addVertex("A", "A");
 		graph.addVertex("B", "B");
 		graph.addVertex("C", "C");
+		graph.addVertex("D", "D");
 		graph.addEdge("A", "B");
 		graph.addEdge("B", "C");
+		graph.addEdge("B", "D");
 	}
 
 	@Test

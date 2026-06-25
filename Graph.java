@@ -157,7 +157,7 @@ public class Graph<Type> {
 		}
 		for (Vertex vertex : vertices.values()) {
 			for (Vertex edge : vertex.edges) {
-				inDegree.put(edge, inDegree.get(vertex) + 1);
+				inDegree.put(edge, inDegree.get(edge) + 1);
 			}
 		}
 
