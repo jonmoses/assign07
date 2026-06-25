@@ -155,6 +155,32 @@ public class Graph<Type> {
 
 
 	public List<Vertex> topoSort() {
+		/*
+		 * Overview of Topological Sort
+• Have a queue of vertices
+• Have a return list where we will insert things in order
+• Initially, vertices with an in-degree of 0 are in the queue
+• When we process each item in the queue:
+• Add it to the return list
+• Remove edges between it and its neigbhors
+• If any neighbors now have an in-degree of 0, add them to the queue
+• Repeat until the queue is empty
+• Return the return list
+		 */
+		LinkedList<Vertex> q = new LinkedList<Vertex>();
+		ArrayList<Vertex> returnList = new ArrayList<Vertex>();
+		
+		HashMap<Vertex, Integer> inDegree = new HashMap<Vertex, Integer>();
+		for (Vertex vertex : vertices.values()) {
+			inDegree.put(vertex, 0);
+		}
+		for (Vertex vertex : vertices.values()) {
+			for (Vertex in : vertex.edges) {
+				inDegree.put(vertex, inDegree.get(vertex) + 1);
+			}
+		}
+		
+		
 
 	}
 
