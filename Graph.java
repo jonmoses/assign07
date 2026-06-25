@@ -95,6 +95,16 @@ public class Graph<Type> {
 		// add new directed edge from vertex1 to vertex2
 		vertex1.addEdge(vertex2);
 	}
+	
+	/**
+	 * add edge method that takes ints so that the timing experiment runs.
+	 *
+	 * @param sourceVertexData      - integer name for source vertex
+	 * @param destinationVertexData - integer name for destination vertex
+	 */
+	public void addEdge(int sourceVertexData, int destinationVertexData) {
+		addEdge(Integer.toString(sourceVertexData), Integer.toString(destinationVertexData));
+	}
 
 	/**
 	 * Generates a simple textual representation of this graph.
@@ -330,5 +340,7 @@ public class Graph<Type> {
 			}
 		}
 	}
+
+
 
 }
